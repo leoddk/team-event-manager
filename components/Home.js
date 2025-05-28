@@ -31,7 +31,7 @@ export default function Home() {
       ) : (
         <ul>
           {events.map(event => (
-            <li key={event.id}>{event.title}</li>
+            <li key={event.id}>{event.title} - {new Date(event.date).toLocaleDateString()}</li>
           ))}
         </ul>
       )}
