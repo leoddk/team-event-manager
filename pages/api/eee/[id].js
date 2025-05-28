@@ -1,62 +1,42 @@
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { supabase } from '../../lib/supabase'
+import { supabase } from '../../../lib/supabase'
 
-export default function EditEEE() {
-  const [eee, setEEE] = useState(null)
-  const router = useRouter()
-  const { id } = router.query
+export default async function handler(req, res) {
+  const { id } = req.query
+  const { method } = req
 
-  useEffect(() => {
-    if (id) fetchEEE()
-  }, [id])
+  switch (method) {
+    case 'GET':
+      try {
+        const { data, error } = await supabase
+          .from('eee')
+          .select('*')
+          .eq('id', id)
+          .single()
 
-  async function fetchEEE() {
-    const { data, error } = await supabase
-      .from('eee')
-      .select('*')
-      .eq('id', id)
-      .single()
+        if (error) throw error
+        res.status(200).json(data)
+      } catch (error) {
+        res.status(400).json({ error: error.message })
+      }
+      break
 
-    if (error) {
-      console.error('Error fetching EEE:', error)
-    } else {
-      setEEE(data)
-    }
+    case 'PUT':
+      try {
+        const updates = req.body
+        const { data, error } = await supabase
+          .from('eee')
+          .update(updates)
+          .eq('id', id)
+
+        if (error) throw error
+        res.status(200).json(data)
+      } catch (error) {
+        res.status(400).json({ error: error.message })
+      }
+      break
+
+    default:
+      res.setHeader('Allow', ['GET', 'PUT'])
+      res.status(405).end(`Method ${method} Not Allowed`)
   }
-
-  async function updateEEE(updates) {
-    const { data, error } = await supabase
-      .from('eee')
-      .update(updates)
-      .eq('id', id)
-
-    if (error) {
-      console.error('Error updating EEE:', error)
-    } else {
-      setEEE(data)
-      router.push('/') // Redirect to home page after update
-    }
-  }
-
-  if (!eee) return <div>Loading...</div>
-
-  return (
-    <div>
-      <h1>Edit EEE</h1>
-      <form onSubmit={(e) => {
-        e.preventDefault()
-        updateEEE({
-          title: e.target.title.value,
-          description: e.target.description.value,
-          // Add other fields as necessary
-        })
-      }}>
-        <input name="title" defaultValue={eee.title} />
-        <textarea name="description" defaultValue={eee.description} />
-        {/* Add other form fields as necessary */}
-        <button type="submit">Save Changes</button>
-      </form>
-    </div>
-  )
 }
