@@ -12,21 +12,32 @@ export default function Home() {
   }, [])
 
   async function fetchEvents() {
-    // ... (fetchEvents function remains the same)
+    try {
+      const { data, error } = await supabase
+        .from('eee')
+        .select('*')
+        .order('date', { ascending: true })
+      console.log('Fetched events:', data)
+      if (error) throw error
+      setEvents(data || [])
+    } catch (error) {
+      console.error('Error fetching events:', error)
+      setError(error.message)
+    }
   }
 
   return (
-    <div className={styles.container}>  {/* Apply container class here */}
+    <div className={styles.container}>
       <h1>Welcome to Team Event Manager</h1>
       {error && <p style={{color: 'red'}}>Error: {error}</p>}
-      <div className={styles.form}>  {/* Apply form class here */}
+      <div className={styles.form}>
         <EEEForm onEventAdded={fetchEvents} />
       </div>
       <h2>Upcoming Events</h2>
       {events.length === 0 ? (
         <p>No events found.</p>
       ) : (
-        <ul className={styles.eventList}>  {/* Apply eventList class here */}
+        <ul className={styles.eventList}>
           {events.map(event => (
             <li key={event.id}>{event.title} - {new Date(event.date).toLocaleDateString()}</li>
           ))}
