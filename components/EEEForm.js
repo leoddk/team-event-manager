@@ -1,8 +1,11 @@
+// components/EEEForm.js
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../lib/auth'
 import styles from '../styles/Home.module.css'
 
 export default function EEEForm({ onEventAdded }) {
+  const { user } = useAuth()
   const [title, setTitle] = useState('')
   const [date, setDate] = useState('')
   const [error, setError] = useState(null)
@@ -13,7 +16,7 @@ export default function EEEForm({ onEventAdded }) {
     try {
       const { data, error } = await supabase
         .from('eee')
-        .insert([{ title, date }])
+        .insert([{ title, date, user_id: user.id }])
       console.log('Supabase response:', { data, error })
       if (error) throw error
       setTitle('')

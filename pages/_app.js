@@ -1,15 +1,12 @@
-import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+// pages/_app.js
+import { AuthProvider } from '../lib/auth'
+import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
-  const [supabaseClient, setSupabaseClient] = useState(null)
-
-  useEffect(() => {
-    setSupabaseClient(supabase)
-  }, [])
-
   return (
-    <Component {...pageProps} supabase={supabaseClient} />
+    <AuthProvider>
+      <Component {...pageProps} />
+    </AuthProvider>
   )
 }
 
