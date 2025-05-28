@@ -12,7 +12,7 @@ export default function EEEForm({ onEventAdded }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Submitting event:', { title, date })
+    console.log('Submitting event:', { title, date, user_id: user.id })
     try {
       const { data, error } = await supabase
         .from('eee')
@@ -31,7 +31,7 @@ export default function EEEForm({ onEventAdded }) {
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <h2>Add New Event</h2>
-      {error && <p style={{color: 'red'}}>{error}</p>}
+      {error && <p style={{color: 'red'}}>Error: {error}</p>}
       <div>
         <label htmlFor="title">Title:</label>
         <input
