@@ -1,33 +1,27 @@
 import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../lib/supabaseClient'
+import Dashboard from '../components/Dashboard'
 import Layout from '../components/Layout'
-import EEETable from '../components/EEETable'
-import SearchFilter from '../components/SearchFilter'
 
-export default function Dashboard() {
-  const [eees, setEEEs] = useState([])
-  const [filteredEEEs, setFilteredEEEs] = useState([])
+export default function Home() {
+  const [events, setEvents] = useState([])
 
   useEffect(() => {
-    fetchEEEs()
+    fetchEvents()
   }, [])
 
-  async function fetchEEEs() {
+  async function fetchEvents() {
     const { data, error } = await supabase
-      .from('eees')
+      .from('events')
       .select('*')
-    if (error) console.error('Error fetching EEEs:', error)
-    else {
-      setEEEs(data)
-      setFilteredEEEs(data)
-    }
+    if (error) console.log('Error fetching events:', error)
+    else setEvents(data)
   }
 
   return (
     <Layout>
-      <h1>EEE Dashboard</h1>
-      <SearchFilter eees={eees} setFilteredEEEs={setFilteredEEEs} />
-      <EEETable eees={filteredEEEs} onDelete={fetchEEEs} />
+      <h1>Team Event Management System</h1>
+      <Dashboard events={events} />
     </Layout>
   )
 }
