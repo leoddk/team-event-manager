@@ -15,6 +15,7 @@ export default function Home() {
         .from('eee')
         .select('*')
       if (error) throw error
+      console.log('Fetched data:', data) // Add this line
       setEvents(data)
     } catch (error) {
       console.error('Error fetching events:', error)
@@ -26,8 +27,9 @@ export default function Home() {
     <div>
       <h1>Welcome to Team Event Manager</h1>
       {error && <p>Error: {error}</p>}
+      <p>Supabase connected. Events count: {events.length}</p>
       {events.length === 0 ? (
-        <p>No events found. {supabase ? 'Supabase connected.' : 'Supabase not connected.'}</p>
+        <p>No events found.</p>
       ) : (
         <ul>
           {events.map(event => (
