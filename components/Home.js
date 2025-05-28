@@ -6,15 +6,16 @@ import EEEForm from './EEEForm'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
-  const { user, signIn, signOut, signUp } = useAuth()
+  const { user, signOut } = useAuth()
   const [events, setEvents] = useState([])
   const [error, setError] = useState(null)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
 
   useEffect(() => {
     if (user) {
+      console.log('User is authenticated, fetching events')
       fetchEvents()
+    } else {
+      console.log('User is not authenticated')
     }
   }, [user])
 
@@ -33,13 +34,24 @@ export default function Home() {
     }
   }
 
-  // ... rest of the component code ...
+  const handleSignOut = async () => {
+    try {
+      await signOut()
+      console.log('User signed out')
+    } catch (error) {
+      console.error('Error signing out:', error)
+    }
+  }
+
+  if (!user) {
+    return <p>Please sign in to view and add events.</p>
+  }
 
   return (
     <div className={styles.container}>
       <h1>Welcome to Team Event Manager</h1>
-      <button onClick={signOut} className={styles.button}>Sign Out</button>
-      {error && <p style={{color: 'red'}}>Error: {error}</p>}
+      <button onClick={handleSignOut} className={styles.button}>Sign Out</button>
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
       <div className={styles.form}>
         <EEEForm onEventAdded={fetchEvents} />
       </div>

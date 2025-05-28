@@ -12,15 +12,25 @@ export default function EEEForm({ onEventAdded }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (!user) {
+      setError('User not authenticated')
+      return
+    }
+
     console.log('Submitting event:', { title, date, user_id: user.id })
+
     try {
       const { data, error } = await supabase
         .from('eee')
         .insert([{ title, date, user_id: user.id }])
       console.log('Supabase response:', { data, error })
       if (error) throw error
+
+      // Clear the form fields
       setTitle('')
       setDate('')
+
+      // Trigger the callback to refresh events
       onEventAdded()
     } catch (error) {
       console.error('Error adding event:', error)
@@ -31,7 +41,7 @@ export default function EEEForm({ onEventAdded }) {
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <h2>Add New Event</h2>
-      {error && <p style={{color: 'red'}}>Error: {error}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <div>
         <label htmlFor="title">Title:</label>
         <input
