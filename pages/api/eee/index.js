@@ -1,27 +1,12 @@
-import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabaseClient'
-import Dashboard from '../components/Dashboard'
-import Layout from '../components/Layout'
+import { supabase } from '../../../lib/supabase'
 
-export default function Home() {
-  const [events, setEvents] = useState([])
-
-  useEffect(() => {
-    fetchEvents()
-  }, [])
-
-  async function fetchEvents() {
+export default async function handler(req, res) {
+  if (req.method === 'GET') {
     const { data, error } = await supabase
-      .from('events')
+      .from('eees')
       .select('*')
-    if (error) console.log('Error fetching events:', error)
-    else setEvents(data)
+    if (error) return res.status(500).json({ error: error.message })
+    return res.status(200).json(data)
   }
-
-  return (
-    <Layout>
-      <h1>Team Event Management System</h1>
-      <Dashboard events={events} />
-    </Layout>
-  )
+  // Add POST method for creating new EEEs
 }
