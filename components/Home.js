@@ -11,12 +11,13 @@ export default function Home() {
 
   async function fetchEvents() {
     try {
+      console.log('Fetching events...')
       const { data, error } = await supabase
         .from('eee')
         .select('*')
+      console.log('Supabase response:', { data, error })
       if (error) throw error
-      console.log('Fetched data:', data) // Add this line
-      setEvents(data)
+      setEvents(data || [])
     } catch (error) {
       console.error('Error fetching events:', error)
       setError(error.message)
