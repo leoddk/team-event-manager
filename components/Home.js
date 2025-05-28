@@ -13,8 +13,12 @@ export default function Home() {
   const [password, setPassword] = useState('')
 
   useEffect(() => {
+    console.log('Home component mounted')
     if (user) {
+      console.log('User is authenticated, fetching events')
       fetchEvents()
+    } else {
+      console.log('User is not authenticated')
     }
   }, [user])
 
@@ -35,21 +39,27 @@ export default function Home() {
 
   const handleSignIn = async (e) => {
     e.preventDefault()
+    console.log('Attempting to sign in')
     try {
       const { error } = await signIn({ email, password })
       if (error) throw error
+      console.log('Sign in successful')
     } catch (error) {
+      console.error('Sign in error:', error)
       alert(error.error_description || error.message)
     }
   }
 
   const handleSignUp = async (e) => {
     e.preventDefault()
+    console.log('Attempting to sign up')
     try {
       const { error } = await signUp({ email, password })
       if (error) throw error
+      console.log('Sign up successful')
       alert('Check your email for the confirmation link!')
     } catch (error) {
+      console.error('Sign up error:', error)
       alert(error.error_description || error.message)
     }
   }

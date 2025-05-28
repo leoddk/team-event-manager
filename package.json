@@ -1,5 +1,5 @@
 {
-  "name": "team-event-management",
+  "name": "your-project-name",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,15 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.49.8",
-    "next": "13.3.1",
+    "@supabase/supabase-js": "^1.35.6",
+    "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@types/node": "18.16.0",
-    "@types/react": "18.0.38",
-    "@types/react-dom": "18.0.11",
-    "typescript": "5.0.4"
+    "eslint": "8.22.0",
+    "eslint-config-next": "12.2.5"
   }
 }
