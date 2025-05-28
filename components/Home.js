@@ -13,12 +13,8 @@ export default function Home() {
   const [password, setPassword] = useState('')
 
   useEffect(() => {
-    console.log('Home component mounted')
     if (user) {
-      console.log('User is authenticated, fetching events')
       fetchEvents()
-    } else {
-      console.log('User is not authenticated')
     }
   }, [user])
 
@@ -37,69 +33,7 @@ export default function Home() {
     }
   }
 
-  const handleSignIn = async (e) => {
-    e.preventDefault()
-    console.log('Attempting to sign in')
-    try {
-      const { error } = await signIn({ email, password })
-      if (error) throw error
-      console.log('Sign in successful')
-    } catch (error) {
-      console.error('Sign in error:', error)
-      alert(error.error_description || error.message)
-    }
-  }
-
-  const handleSignUp = async (e) => {
-    e.preventDefault()
-    console.log('Attempting to sign up')
-    try {
-      const { error } = await signUp({ email, password })
-      if (error) throw error
-      console.log('Sign up successful')
-      alert('Check your email for the confirmation link!')
-    } catch (error) {
-      console.error('Sign up error:', error)
-      alert(error.error_description || error.message)
-    }
-  }
-
-  if (!user) {
-    return (
-      <div className={styles.authContainer}>
-        <form onSubmit={handleSignIn} className={styles.form}>
-          <h1>Team Event Manager</h1>
-          <p>Sign in to add and view events</p>
-          <div>
-            <input
-              type="email"
-              placeholder="Your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div>
-            <input
-              type="password"
-              placeholder="Your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div>
-            <button className={styles.button} type="submit">
-              Sign In
-            </button>
-          </div>
-          <div>
-            <button className={styles.button} onClick={handleSignUp}>
-              Sign Up
-            </button>
-          </div>
-        </form>
-      </div>
-    )
-  }
+  // ... rest of the component code ...
 
   return (
     <div className={styles.container}>
@@ -109,7 +43,7 @@ export default function Home() {
       <div className={styles.form}>
         <EEEForm onEventAdded={fetchEvents} />
       </div>
-      <h2>Upcoming Events</h2>
+      <h2>Your Events</h2>
       {events.length === 0 ? (
         <p>No events found.</p>
       ) : (
