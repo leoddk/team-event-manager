@@ -8,7 +8,8 @@ export default function EEEForm({ onEventAdded }) {
   const { user } = useAuth()
   const [title, setTitle] = useState('')
   const [date, setDate] = useState('')
-  const [location, setLocation] = useState('') // Add location state
+  const [location, setLocation] = useState('')
+  const [poc, setPoc] = useState('') // Add POC state
   const [error, setError] = useState(null)
 
   const handleSubmit = async (e) => {
@@ -17,16 +18,17 @@ export default function EEEForm({ onEventAdded }) {
       setError('User not authenticated')
       return
     }
-    console.log('Submitting event:', { title, date, location, user_id: user.id })
+    console.log('Submitting event:', { title, date, location, poc, user_id: user.id })
     try {
       const { data, error } = await supabase
         .from('eee')
-        .insert([{ title, date, location, user_id: user.id }])
+        .insert([{ title, date, location, poc, user_id: user.id }])
       console.log('Supabase response:', { data, error })
       if (error) throw error
       setTitle('')
       setDate('')
-      setLocation('') // Clear location field
+      setLocation('')
+      setPoc('') // Clear POC field
       onEventAdded()
     } catch (error) {
       console.error('Error adding event:', error)
@@ -65,6 +67,16 @@ export default function EEEForm({ onEventAdded }) {
           id="location"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="poc">Point of Contact:</label>
+        <input
+          type="text"
+          id="poc"
+          value={poc}
+          onChange={(e) => setPoc(e.target.value)}
+          placeholder="Name of contact person"
         />
       </div>
       <button type="submit">Add Event</button>

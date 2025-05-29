@@ -122,6 +122,7 @@ export default function Home() {
             <li key={event.id}>
               {event.title} - {new Date(event.date).toLocaleDateString()}
               {event.location && <div><small>Location: {event.location}</small></div>}
+              {event.poc && <div><small>Point of Contact: {event.poc}</small></div>}
             </li>
           ))}
         </ul>
