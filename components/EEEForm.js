@@ -8,6 +8,7 @@ export default function EEEForm({ onEventAdded }) {
   const { user } = useAuth()
   const [title, setTitle] = useState('')
   const [date, setDate] = useState('')
+  const [location, setLocation] = useState('') // Add location state
   const [error, setError] = useState(null)
 
   const handleSubmit = async (e) => {
@@ -16,21 +17,16 @@ export default function EEEForm({ onEventAdded }) {
       setError('User not authenticated')
       return
     }
-
-    console.log('Submitting event:', { title, date, user_id: user.id })
-
+    console.log('Submitting event:', { title, date, location, user_id: user.id })
     try {
       const { data, error } = await supabase
         .from('eee')
-        .insert([{ title, date, user_id: user.id }])
+        .insert([{ title, date, location, user_id: user.id }])
       console.log('Supabase response:', { data, error })
       if (error) throw error
-
-      // Clear the form fields
       setTitle('')
       setDate('')
-
-      // Trigger the callback to refresh events
+      setLocation('') // Clear location field
       onEventAdded()
     } catch (error) {
       console.error('Error adding event:', error)
@@ -41,9 +37,9 @@ export default function EEEForm({ onEventAdded }) {
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <h2>Add New Event</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p style={{color: 'red'}}>{error}</p>}
       <div>
-        <label htmlFor="title">Title:</label>
+        <label htmlFor="title">Event Name:</label>
         <input
           type="text"
           id="title"
@@ -60,6 +56,15 @@ export default function EEEForm({ onEventAdded }) {
           value={date}
           onChange={(e) => setDate(e.target.value)}
           required
+        />
+      </div>
+      <div>
+        <label htmlFor="location">Location:</label>
+        <input
+          type="text"
+          id="location"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
         />
       </div>
       <button type="submit">Add Event</button>

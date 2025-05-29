@@ -119,7 +119,10 @@ export default function Home() {
       ) : (
         <ul className={styles.eventList}>
           {events.map(event => (
-            <li key={event.id}>{event.title} - {new Date(event.date).toLocaleDateString()}</li>
+            <li key={event.id}>
+              {event.title} - {new Date(event.date).toLocaleDateString()}
+              {event.location && <div><small>Location: {event.location}</small></div>}
+            </li>
           ))}
         </ul>
       )}
