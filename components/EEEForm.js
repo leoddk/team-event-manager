@@ -8,8 +8,10 @@ export default function EEEForm({ onEventAdded }) {
   const { user } = useAuth()
   const [title, setTitle] = useState('')
   const [date, setDate] = useState('')
+  const [startTime, setStartTime] = useState('') // Add start time
+  const [endTime, setEndTime] = useState('') // Add end time
   const [location, setLocation] = useState('')
-  const [poc, setPoc] = useState('') // Add POC state
+  const [poc, setPoc] = useState('')
   const [error, setError] = useState(null)
 
   const handleSubmit = async (e) => {
@@ -18,17 +20,35 @@ export default function EEEForm({ onEventAdded }) {
       setError('User not authenticated')
       return
     }
-    console.log('Submitting event:', { title, date, location, poc, user_id: user.id })
+    console.log('Submitting event:', { 
+      title, 
+      date, 
+      start_time: startTime,
+      end_time: endTime,
+      location, 
+      poc, 
+      user_id: user.id 
+    })
     try {
       const { data, error } = await supabase
         .from('eee')
-        .insert([{ title, date, location, poc, user_id: user.id }])
+        .insert([{ 
+          title, 
+          date, 
+          start_time: startTime,
+          end_time: endTime,
+          location, 
+          poc, 
+          user_id: user.id 
+        }])
       console.log('Supabase response:', { data, error })
       if (error) throw error
       setTitle('')
       setDate('')
+      setStartTime('')
+      setEndTime('')
       setLocation('')
-      setPoc('') // Clear POC field
+      setPoc('')
       onEventAdded()
     } catch (error) {
       console.error('Error adding event:', error)
@@ -58,6 +78,24 @@ export default function EEEForm({ onEventAdded }) {
           value={date}
           onChange={(e) => setDate(e.target.value)}
           required
+        />
+      </div>
+      <div>
+        <label htmlFor="startTime">Start Time:</label>
+        <input
+          type="time"
+          id="startTime"
+          value={startTime}
+          onChange={(e) => setStartTime(e.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="endTime">End Time:</label>
+        <input
+          type="time"
+          id="endTime"
+          value={endTime}
+          onChange={(e) => setEndTime(e.target.value)}
         />
       </div>
       <div>

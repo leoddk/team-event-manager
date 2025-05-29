@@ -120,7 +120,14 @@ export default function Home() {
         <ul className={styles.eventList}>
           {events.map(event => (
             <li key={event.id}>
-              {event.title} - {new Date(event.date).toLocaleDateString()}
+              <strong>{event.title}</strong> - {new Date(event.date).toLocaleDateString()}
+              {(event.start_time || event.end_time) && 
+                <div>
+                  <small>
+                    Time: {event.start_time || 'N/A'} - {event.end_time || 'N/A'}
+                  </small>
+                </div>
+              }
               {event.location && <div><small>Location: {event.location}</small></div>}
               {event.poc && <div><small>Point of Contact: {event.poc}</small></div>}
             </li>
