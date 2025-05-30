@@ -1,23 +1,24 @@
-import { Component, useEffect } from 'react';
-import { AuthProvider, useAuth } from '../lib/auth';
-import '../styles/globals.css';
-import Navbar from '../components/Navbar'; // Import the Navbar
-import styles from '../styles/Home.module.css'; // Import the styles
-import { useRouter } from 'next/router';
+// pages/_app.js
+import { Component } from 'react'
+import { AuthProvider, useAuth } from '../lib/auth'
+import '../styles/globals.css'
+import Navbar from '../components/Navbar'
+import styles from '../styles/Home.module.css'
+import { useRouter } from 'next/router'
 
 class ErrorBoundary extends Component {
   constructor(props) {
-    super(props);
-    this.state = { hasError: false, error: null, errorInfo: null };
+    super(props)
+    this.state = { hasError: false, error: null, errorInfo: null }
   }
 
   static getDerivedStateFromError(error) {
-    return { hasError: true, error };
+    return { hasError: true, error }
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error("Error caught by boundary:", error, errorInfo);
-    this.setState({ errorInfo });
+    console.error("Error caught by boundary:", error, errorInfo)
+    this.setState({ errorInfo })
   }
 
   render() {
@@ -32,45 +33,37 @@ class ErrorBoundary extends Component {
             <pre>{this.state.errorInfo && this.state.errorInfo.componentStack}</pre>
           </details>
         </div>
-      );
+      )
     }
-    return this.props.children;
+    return this.props.children
   }
 }
 
-function MyApp({ Component, pageProps }) {
+function AppWrapper({ Component, pageProps }) {
   return (
     <ErrorBoundary>
       <AuthProvider>
-        <AuthCheck>
-            <div className={styles.container}>
-            <Component {...pageProps} />
-        </div>
-        </AuthCheck>
+        <AppContent Component={Component} pageProps={pageProps} />
       </AuthProvider>
     </ErrorBoundary>
-  );
+  )
 }
 
-function AuthCheck(props) {
-  const { user, signOut } = useAuth()
-  const router = useRouter();
-
-  useEffect(() => {
-    console.log('In useEffect, user is:', user);
-    if (!user) {
-      router.push('/')
-    }
-  }, [user, router]);
-
-  return user ? (
+function AppContent({ Component, pageProps }) {
+  const { user } = useAuth()
+  const router = useRouter()
+  
+  // Only show Navbar on authenticated routes, except for home page which has its own authentication check
+  const showNavbar = user && router.pathname !== '/'
+  
+  return (
     <>
-          <Navbar/>
-{props.children}
+      {showNavbar && <Navbar />}
+      <div className={styles.container}>
+        <Component {...pageProps} />
+      </div>
     </>
-  ) : (
-    <div>Loading...</div>
-  );
+  )
 }
 
-export default MyApp
+export default AppWrapper
