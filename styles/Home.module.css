@@ -94,7 +94,8 @@
   gap: 10px;
 }
 
-.editButton, .deleteButton {
+.editButton,
+.deleteButton {
   padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
@@ -120,27 +121,65 @@
   background-color: #d24c4c;
 }
 
-/* New for NavBar */
-.nav {
+/* New styles for HomePageContent.js */
+.contentContainer {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.contentContainer h1 {
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.contentContainer p {
+  color: #555;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.contentContainer .features {
   display: flex;
   justify-content: space-around;
-  background-color: #f0f0f0; /* Light gray background */
-  padding: 10px;
-  border-bottom: 1px solid #ddd; /* Subtle border */
+  margin-bottom: 30px;
 }
 
-.navButton {
-  background-color: #0070f3;
-  color: white;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.contentContainer .features div {
+  width: 45%;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.contentContainer .features h3 {
+  color: #444;
+  margin-bottom: 15px;
+}
+
+.contentContainer .features ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.contentContainer .features li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.contentContainer .footer {
+  text-align: center;
+  margin-top: 20px;
+  color: #777;
+}
+
+.contentContainer .footer a {
+  color: #0070f3;
   text-decoration: none;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-.navButton:hover {
-  background-color: #0056b3;
 }
