@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../lib/auth'
 import EEEForm from './EEEForm'
 import styles from '../styles/Home.module.css'
+import { format } from 'date-fns-tz'
 
 export default function Home() {
   const { user, signIn, signUp, signOut } = useAuth()
@@ -19,20 +20,20 @@ export default function Home() {
     }
   }, [user])
 
-  async function fetchEvents() {
-    try {
-      const { data, error } = await supabase
-        .from('eee')
-        .select('*')
-        .order('date', { ascending: true })
-      console.log('Fetched events:', data)
-      if (error) throw error
-      setEvents(data || [])
-    } catch (error) {
-      console.error('Error fetching events:', error)
-      setError(error.message)
+    async function fetchEvents() {
+        try {
+            const { data, error } = await supabase
+                .from('eee')
+                .select('*')
+                .order('date', { ascending: true });
+            console.log('Fetched events:', data);
+            if (error) throw error
+            setEvents(data || [])
+        } catch (error) {
+            console.error('Error fetching events:', error)
+            setError(error.message)
+        }
     }
-  }
 
   const handleSignIn = async (e) => {
     e.preventDefault()
@@ -120,11 +121,11 @@ export default function Home() {
         <ul className={styles.eventList}>
           {events.map(event => (
             <li key={event.id}>
-              <strong>{event.title}</strong> - {new Date(event.date).toLocaleDateString()}
+              <strong>{event.title}</strong> - {format(new Date(event.date), 'yyyy-MM-dd HH:mm', { timeZone: event.event_timezone })}
               {(event.start_time || event.end_time) && 
                 <div>
                   <small>
-                    Time: {event.start_time || 'N/A'} - {event.end_time || 'N/A'}
+                    Time: {format(new Date(event.start_time), 'HH:mm', { timeZone: event.event_timezone })} - {format(new Date(event.end_time), 'HH:mm', { timeZone: event.event_timezone })} ({event.event_timezone})
                   </small>
                 </div>
               }
@@ -133,7 +134,7 @@ export default function Home() {
             </li>
           ))}
         </ul>
-      )}
+      </div>
     </div>
   )
 }
