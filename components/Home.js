@@ -1,14 +1,63 @@
-// pages/index.js
-import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../lib/auth';
-import styles from '../styles/Home.module.css';
-import HomePageContent from '../components/HomePageContent';
+import { useState, useEffect } from 'react'
+import { supabase } from '../lib/supabase'
+import { useAuth } from '../lib/auth'
+import EEEForm from './EEEForm'
+import styles from '../styles/Home.module.css'
+import { format } from 'date-fns-tz'
+import { useRouter } from 'next/router'
 
 export default function Home() {
+  const router = useRouter();
   const { user, signIn, signUp, signOut } = useAuth();
+  const [events, setEvents] = useState([]);
+  const [error, setError] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    console.log('User state in Home:', user);
+    if (user) {
+      fetchEvents();
+    }
+  }, [user]);
+
+  async function fetchEvents() {
+    try {
+      const { data, error } = await supabase
+        .from('eee')
+        .select('*')
+        .order('date', { ascending: true });
+      console.log('Fetched events:', data);
+      if (error) throw error;
+      setEvents(data || []);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      setError(error.message);
+    }
+  }
+
+  // Add delete function
+  async function handleDelete(id) {
+    if (confirm('Are you sure you want to delete this event?')) {
+      try {
+        const { error } = await supabase
+          .from('eee')
+          .delete()
+          .eq('id', id);
+        if (error) throw error;
+        // Refresh the event list
+        fetchEvents();
+      } catch (error) {
+        console.error('Error deleting event:', error);
+        setError(error.message);
+      }
+    }
+  }
+
+  // Function to navigate to edit page
+  function handleEdit(id) {
+    router.push(`/edit-eee/${id}`);
+  }
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -39,6 +88,7 @@ export default function Home() {
     try {
       await signOut();
       console.log('User signed out');
+      router.push('/') // Redirect to the home page
     } catch (error) {
       console.error('Sign out error:', error);
     }

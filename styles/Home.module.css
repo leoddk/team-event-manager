@@ -219,3 +219,14 @@
 .signOutButton:hover {
   background-color: #c0392b; /* Darker red on hover */
 }
+
+/* Search Input Style */
+.searchInput {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+}
