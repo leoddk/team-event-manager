@@ -6,7 +6,6 @@ import EEEForm from './EEEForm';
 import styles from '../styles/Home.module.css';
 import { format } from 'date-fns-tz';
 import { useRouter } from 'next/router';
-import EventTable from './EventTable';
 
 export default function AddEEE() {
   const router = useRouter();
