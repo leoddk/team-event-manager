@@ -5,7 +5,7 @@ import styles from '../styles/Home.module.css';
 const HomePageContent = () => {
   return (
     <div className={styles.contentContainer}>
-      <h1>Welcome to Team Event Manager!</h1>
+      <h1>Welcome to the EEE Scheduler!</h1>
       <p>This platform helps teams organize and manage their events efficiently.</p>
       <section className={styles.features}>
         <div>
@@ -20,8 +20,8 @@ const HomePageContent = () => {
         <div>
           <h3>About Us</h3>
           <p>
-            Team Event Manager was created by [Your Name/Team Name] to solve the challenges of coordinating team activities.
-            We are dedicated to providing a simple, intuitive, and powerful solution for all your event management needs.
+            Team Event Manager was created by Dodge Kudrna to solve the challenges of coordinating Exercises/Events/Experiments (EEE).
+            We are dedicated to providing a simple, intuitive, and powerful solution for all your EEE scheduling needs.
           </p>
         </div>
       </section>

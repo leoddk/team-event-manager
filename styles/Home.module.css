@@ -183,3 +183,39 @@
   color: #0070f3;
   text-decoration: none;
 }
+
+/* New for NavBar */
+.nav {
+  display: flex;
+  justify-content: space-between; /* Adjust to distribute items */
+  align-items: center; /* Vertically align items */
+  background-color: #f0f0f0;
+  padding: 10px 20px; /* Add some padding to the sides */
+  border-bottom: 1px solid #ddd;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.nav a:hover {
+  color: #0070f3;
+}
+
+.signOutButton {
+  background-color: #e74c3c; /* Red color for sign out button */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.signOutButton:hover {
+  background-color: #c0392b; /* Darker red on hover */
+}
