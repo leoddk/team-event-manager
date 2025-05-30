@@ -1,9 +1,9 @@
-// pages/_app.js
 import { Component } from 'react'
 import { AuthProvider } from '../lib/auth'
 import '../styles/globals.css'
+import Navbar from '../components/Navbar'; // Import the Navbar
+import styles from '../styles/Home.module.css'; // Import the styles
 
-// Add Error Boundary
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props)
@@ -41,10 +41,13 @@ function MyApp({ Component, pageProps }) {
   return (
     <ErrorBoundary>
       <AuthProvider>
-        <Component {...pageProps} />
+          <Navbar/>
+        <div className={styles.container}>
+          <Component {...pageProps} />
+        </div>
       </AuthProvider>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default MyApp
