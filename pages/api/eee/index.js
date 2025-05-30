@@ -1,12 +1,17 @@
-import { supabase } from '../../../lib/supabase'
+// pages/index.js
+import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../lib/auth';
+import styles from '../styles/Home.module.css';
+import HomePageContent from '../components/HomePageContent';
+import AddEEE from '../components/AddEEE';
 
-export default async function handler(req, res) {
-  if (req.method === 'GET') {
-    const { data, error } = await supabase
-      .from('eees')
-      .select('*')
-    if (error) return res.status(500).json({ error: error.message })
-    return res.status(200).json(data)
-  }
-  // Add POST method for creating new EEEs
+export default function Home() {
+  const { user, signOut } = useAuth();
+  return (
+      <div className={styles.container}>
+      <h1>Welcome to Team Event Manager</h1>
+      <button onClick={signOut} className={styles.button}>Sign Out</button>
+    </div>
+  );
 }
