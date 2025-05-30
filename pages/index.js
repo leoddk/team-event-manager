@@ -4,11 +4,13 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/auth';
 import styles from '../styles/Home.module.css';
 import HomePageContent from '../components/HomePageContent';
+import { useRouter } from 'next/router';
 
 export default function Home() {
   const { user, signIn, signUp, signOut } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+    const router = useRouter();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -39,6 +41,7 @@ export default function Home() {
     try {
       await signOut();
       console.log('User signed out');
+      router.push('/') // Redirect to the home page
     } catch (error) {
       console.error('Sign out error:', error);
     }
