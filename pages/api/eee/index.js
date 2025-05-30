@@ -1,55 +1,79 @@
-import { supabase } from '../../../lib/supabase'
+// pages/index.js
+import { useState } from 'react';
+import { useAuth } from '../lib/auth';
+import styles from '../styles/Home.module.css';
+import HomePageContent from '../components/HomePageContent';
+import { useRouter } from 'next/router';
 
-export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    // Handle POST request to create a new event
+export default function Home() {
+  const { user, signIn, signUp } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
+
+  const handleSignIn = async (e) => {
+    e.preventDefault();
     try {
-      const { title, date, location, poc, event_timezone } = req.body;
-      console.log('Received data:', { title, date, location, poc, event_timezone });
-
-      const { data, error } = await supabase
-        .from('eee')
-        .insert([{
-          title,
-          date,
-          location,
-          poc,
-          event_timezone,
-          user_id: req.body.user_id // Assuming user_id is passed in the request body
-        }]);
-
-      if (error) {
-        console.error('Supabase error:', error);
-        return res.status(500).json({ error: error.message });
-      }
-
-      console.log('Created event:', data);
-      return res.status(200).json({ message: 'Event created successfully!' });
+      console.log('Attempting to sign in with email:', email);
+      await signIn({ email, password });
+      console.log('Sign in successful');
     } catch (error) {
-      console.error('Server error:', error);
-      return res.status(500).json({ error: 'Failed to create event' });
+      console.error('Sign in error:', error);
+      alert(error.message);
     }
-  } else if (req.method === 'GET') {
-    // Handle GET request to fetch events
+  };
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
     try {
-      const { data, error } = await supabase
-        .from('eee')
-        .select('*');
-
-      if (error) {
-        console.error('Supabase error:', error);
-        return res.status(500).json({ error: error.message });
-      }
-
-      console.log('Fetched events:', data);
-      return res.status(200).json(data);
+      console.log('Attempting to sign up with email:', email);
+      await signUp({ email, password });
+      console.log('Sign up successful');
+      alert('Check your email for the confirmation link!');
     } catch (error) {
-      console.error('Server error:', error);
-      return res.status(500).json({ error: 'Failed to fetch events' });
+      console.error('Sign up error:', error);
+      alert(error.message);
     }
-  } else {
-    // Handle other methods
-    res.setHeader('Allow', ['GET', 'POST']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+  };
+
+  // If not signed in, always show sign in form
+  if (!user) {
+    return (
+      <div className={styles.authContainer}>
+        <form onSubmit={handleSignIn} className={styles.form}>
+          <h1>Team Event Manager</h1>
+          <p>Sign in to add and view events</p>
+          <div>
+            <input
+              type="email"
+              placeholder="Your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div>
+            <input
+              type="password"
+              placeholder="Your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div>
+            <button className={styles.button} type="submit">
+              Sign In
+            </button>
+          </div>
+          <div>
+            <button className={styles.button} onClick={handleSignUp}>
+              Sign Up
+            </button>
+          </div>
+        </form>
+      </div>
+    );
   }
+
+  // Only show home content if signed in
+  return <HomePageContent />;
 }
