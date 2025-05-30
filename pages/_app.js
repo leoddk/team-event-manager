@@ -1,22 +1,23 @@
-import { Component } from 'react'
-import { AuthProvider } from '../lib/auth'
-import '../styles/globals.css'
+import { Component, useEffect } from 'react';
+import { AuthProvider, useAuth } from '../lib/auth';
+import '../styles/globals.css';
 import Navbar from '../components/Navbar'; // Import the Navbar
 import styles from '../styles/Home.module.css'; // Import the styles
+import { useRouter } from 'next/router';
 
 class ErrorBoundary extends Component {
   constructor(props) {
-    super(props)
-    this.state = { hasError: false, error: null, errorInfo: null }
+    super(props);
+    this.state = { hasError: false, error: null, errorInfo: null };
   }
 
   static getDerivedStateFromError(error) {
-    return { hasError: true, error }
+    return { hasError: true, error };
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error("Error caught by boundary:", error, errorInfo)
-    this.setState({ errorInfo })
+    console.error("Error caught by boundary:", error, errorInfo);
+    this.setState({ errorInfo });
   }
 
   render() {
@@ -31,9 +32,9 @@ class ErrorBoundary extends Component {
             <pre>{this.state.errorInfo && this.state.errorInfo.componentStack}</pre>
           </details>
         </div>
-      )
+      );
     }
-    return this.props.children
+    return this.props.children;
   }
 }
 
@@ -41,12 +42,34 @@ function MyApp({ Component, pageProps }) {
   return (
     <ErrorBoundary>
       <AuthProvider>
-          <Navbar/>
-        <div className={styles.container}>
-          <Component {...pageProps} />
+        <AuthCheck>
+            <div className={styles.container}>
+            <Component {...pageProps} />
         </div>
+        </AuthCheck>
       </AuthProvider>
     </ErrorBoundary>
+  );
+}
+
+function AuthCheck(props) {
+  const { user, signOut } = useAuth()
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log('In useEffect, user is:', user);
+    if (!user) {
+      router.push('/')
+    }
+  }, [user, router]);
+
+  return user ? (
+    <>
+          <Navbar/>
+{props.children}
+    </>
+  ) : (
+    <div>Loading...</div>
   );
 }
 
