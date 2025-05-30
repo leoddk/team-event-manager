@@ -1,3 +1,4 @@
+// pages/index.js
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/auth';
@@ -19,7 +20,7 @@ export default function Home() {
       console.error('Sign in error:', error);
       alert(error.message);
     }
-  };
+  }
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -32,7 +33,7 @@ export default function Home() {
       console.error('Sign up error:', error);
       alert(error.message);
     }
-  };
+  }
 
   const handleSignOut = async () => {
     try {
@@ -41,7 +42,7 @@ export default function Home() {
     } catch (error) {
       console.error('Sign out error:', error);
     }
-  };
+  }
 
   if (!user) {
     return (
@@ -81,6 +82,6 @@ export default function Home() {
   }
 
   return (
-    <HomePageContent/>
+    <HomePageContent />
   );
 }
