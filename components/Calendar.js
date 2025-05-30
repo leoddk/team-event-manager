@@ -1,40 +1,57 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import styles from '../styles/Home.module.css'
+import { Calendar, momentLocalizer } from 'react-big-calendar'
+import moment from 'moment'
+import 'react-big-calendar/lib/css/react-big-calendar.css'
 
-export default function Calendar() {
-  const [events, setEvents] = useState([])
-  const [error, setError] = useState(null)
+const localizer = momentLocalizer(moment) // Pass the moment object to the localizer
 
-  useEffect(() => {
-    fetchEvents()
-  }, [])
+export default function CalendarView() {
+    const [events, setEvents] = useState([])
+    const [error, setError] = useState(null)
 
-  async function fetchEvents() {
-    try {
-      const { data, error } = await supabase
-        .from('eee')
-        .select('*')
-      if (error) throw error
-      setEvents(data)
-    } catch (error) {
-      console.error('Error fetching events:', error)
-      setError(error.message)
+    useEffect(() => {
+        fetchEvents()
+    }, [])
+
+    async function fetchEvents() {
+        try {
+            const { data, error } = await supabase
+                .from('eee')
+                .select('*')
+                .order('date', { ascending: true });
+            
+            if (error) throw error
+            
+            // Format events for react-big-calendar
+            const formattedEvents = data.map(event => ({
+                id: event.id,
+                title: event.title,
+                start: new Date(event.date),
+                end: new Date(event.date),
+            }))
+            setEvents(formattedEvents || [])
+        } catch (error) {
+            console.error('Error fetching events:', error)
+            setError(error.message)
+        }
     }
-  }
 
-  return (
-    <div>
-      <h1>Calendar</h1>
-      {error && <p>Error: {error}</p>}
-      {events.length === 0 ? (
-        <p>No events found.</p>
-      ) : (
-        <ul>
-          {events.map(event => (
-            <li key={event.id}>{event.title} - {new Date(event.date).toLocaleDateString()}</li>
-          ))}
-        </ul>
-      )}
-    </div>
-  )
+    return (
+        <div className={styles.container}>
+            <h1>Event Calendar</h1>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <div style={{ height: '600px' }}>
+                <Calendar
+                    localizer={localizer}
+                    events={events}
+                    startAccessor="start"
+                    endAccessor="end"
+                    titleAccessor="title"
+                    style={{ margin: '20px' }}
+                />
+            </div>
+        </div>
+    )
 }
