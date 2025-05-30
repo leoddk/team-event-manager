@@ -5,6 +5,7 @@ import { useAuth } from '../lib/auth'
 import EEEForm from './EEEForm'
 import styles from '../styles/Home.module.css'
 import { format } from 'date-fns-tz'
+import Link from 'next/link'  // Added for navigation
 
 export default function Home() {
     const { user, signIn, signUp, signOut } = useAuth()
@@ -32,6 +33,26 @@ export default function Home() {
         } catch (error) {
             console.error('Error fetching events:', error)
             setError(error.message)
+        }
+    }
+
+    // Add delete function
+    async function handleDelete(id) {
+        if (confirm('Are you sure you want to delete this event?')) {
+            try {
+                const { error } = await supabase
+                    .from('eee')
+                    .delete()
+                    .eq('id', id);
+                
+                if (error) throw error;
+                
+                // Refresh the event list
+                fetchEvents();
+            } catch (error) {
+                console.error('Error deleting event:', error);
+                setError(error.message);
+            }
         }
     }
 
@@ -122,7 +143,7 @@ export default function Home() {
                     {events.map(event => (
                         <li key={event.id}>
                             <strong>{event.title}</strong> - {format(new Date(event.date), 'yyyy-MM-dd HH:mm', { timeZone: event.event_timezone })}
-                            {(event.start_time || event.end_time) &&
+                            {(event.start_time || event.end_time) && 
                                 <div>
                                     <small>
                                         Time: {format(new Date(event.start_time), 'HH:mm', { timeZone: event.event_timezone })} - {format(new Date(event.end_time), 'HH:mm', { timeZone: event.event_timezone })} ({event.event_timezone})
@@ -131,6 +152,19 @@ export default function Home() {
                             }
                             {event.location && <div><small>Location: {event.location}</small></div>}
                             {event.poc && <div><small>Point of Contact: {event.poc}</small></div>}
+                            
+                            {/* Add Edit and Delete buttons */}
+                            <div className={styles.eventActions}>
+                                <Link href={`/edit-eee/${event.id}`}>
+                                    <button className={styles.editButton}>Edit</button>
+                                </Link>
+                                <button 
+                                    className={styles.deleteButton} 
+                                    onClick={() => handleDelete(event.id)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
                         </li>
                     ))}
                 </ul>
