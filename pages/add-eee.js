@@ -1,20 +1,10 @@
-import { useState } from 'react'
-import { supabase } from '../lib/supabase'
+import React from 'react';
+import AddEEE from '../components/AddEEE';
 
-export default function AddEEE() {
-  const [newEEE, setNewEEE] = useState({})
-
-  async function handleSubmit(e) {
-    e.preventDefault()
-    // Add your logic to insert the new EEE into Supabase
-  }
-
+const AddEEEPage = () => {
   return (
-    <div>
-      <h1>Add New EEE</h1>
-      <form onSubmit={handleSubmit}>
-        {/* Add your form elements here */}
-      </form>
-    </div>
-  )
-}
+    <AddEEE />
+  );
+};
+
+export default AddEEEPage;
