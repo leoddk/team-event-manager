@@ -1,9 +1,9 @@
-// components/Home.js
+// pages/index.js
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/auth';
 import styles from '../styles/Home.module.css';
-import HomePageContent from './HomePageContent';
+import HomePageContent from '../components/HomePageContent';
 
 export default function Home() {
   const { user, signIn, signUp, signOut } = useAuth();
