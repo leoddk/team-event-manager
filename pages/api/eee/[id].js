@@ -12,7 +12,6 @@ export default async function handler(req, res) {
           .select('*')
           .eq('id', id)
           .single()
-
         if (error) throw error
         res.status(200).json(data)
       } catch (error) {
@@ -27,7 +26,6 @@ export default async function handler(req, res) {
           .from('eee')
           .update(updates)
           .eq('id', id)
-
         if (error) throw error
         res.status(200).json(data)
       } catch (error) {
