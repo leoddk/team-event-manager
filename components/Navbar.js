@@ -24,6 +24,7 @@ export default function Navbar() {
   return (
     <nav className={styles.nav}>
       <Link href="/" className={`${styles.navButton} ${styles.editButton}`}>Home</Link>
+      <Link href="/eee" className={`${styles.navButton} ${styles.editButton}`}>EEE</Link>
       <Link href="/calendar" className={`${styles.navButton} ${styles.editButton}`}>Calendar</Link>
       <Link href="/add-eee" className={`${styles.navButton} ${styles.editButton}`}>Add EEE</Link>
       <button className={`${styles.navButton} ${styles.signOutButton}`} onClick={handleSignOut}>

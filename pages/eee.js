@@ -40,8 +40,8 @@ const EeePage = () => {
     // Update filtered events whenever events or searchQuery changes
     const filtered = events.filter(event =>
       event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      event.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      event.poc.toLowerCase().includes(searchQuery.toLowerCase())
+      (event.location && event.location.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (event.poc && event.poc.toLowerCase().includes(searchQuery.toLowerCase()))
     );
     setFilteredEvents(filtered);
   }, [events, searchQuery]);
@@ -81,7 +81,7 @@ const EeePage = () => {
         className={styles.searchInput}
       />
       <h2>Your Events</h2>
-      {events.length === 0 ? (
+      {filteredEvents.length === 0 ? (
         <p>No events found.</p>
       ) : (
         <ul>
