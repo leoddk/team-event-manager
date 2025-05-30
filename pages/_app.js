@@ -1,6 +1,6 @@
 // pages/_app.js
 import { Component } from 'react';
-import { AuthProvider, useAuth } from '../lib/auth';
+import { AuthProvider } from '../lib/auth';
 import '../styles/globals.css';
 import Navbar from '../components/Navbar';
 import styles from '../styles/Home.module.css';

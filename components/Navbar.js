@@ -12,7 +12,8 @@ export default function Navbar() {
     try {
       await signOut();
       console.log('User signed out');
-      router.push('/'); // Redirect to home which will show sign-in form
+      // Force a page reload to clear any state
+      window.location.href = '/';
     } catch (error) {
       console.error('Error signing out:', error);
     }
