@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { supabase } from '../../lib/supabase'
-import { useAuth } from '../../lib/auth'
+import { supabase } from '../../../lib/supabase'
+import { useAuth } from '../../../lib/auth'
 import styles from '../../../styles/Home.module.css'
 
 // List of common timezones (you can expand this)
